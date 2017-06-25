@@ -17,7 +17,7 @@ from scipy import ndimage
 from six.moves.urllib.request import urlretrieve
 from six.moves import cPickle as pickle
 import tensorflow  as tf
-%load PersonalDirectory.py
+#%load PersonalDirectory.py
 
 #%% load data.
 pickle_file = 'trial1.pickle'
@@ -55,20 +55,17 @@ sess = tf.InteractiveSession()
 x = tf.placeholder(tf.float32, [None, image_size * image_size])
 W = tf.Variable(tf.zeros([image_size * image_size, num_labels]))
 b = tf.Variable(tf.zeros([2]))
-y = tf.nn.softmax(tf.matmul(x, W) + b)
 y_ = tf.placeholder(tf.float32, [None, 2])
 #beta_regul = tf.constant(0.001)
 tf.test_dataset = tf.constant(test_dataset)
-
-sess.run(tf.global_variables_initializer())
-
-#%%
 beta_regul = tf.placeholder(tf.float32)
 y = tf.matmul(x,W) + b
+sess.run(tf.global_variables_initializer())
+
 loss_function = tf.reduce_mean(
     tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)) 
 
-#+\                               beta_regul * tf.nn.l2_loss(W)
+#+\beta_regul * tf.nn.l2_loss(W)
 
 train_step = tf.train.GradientDescentOptimizer(0.05).minimize(loss_function)
 

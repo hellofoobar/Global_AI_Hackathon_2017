@@ -123,18 +123,17 @@ with tf.Session() as sess:
       test_accuracy = accuracy.eval(feed_dict={
           x: test_dataset, y_: test_labels, keep_prob: 1.0})
       print('step %d, test accuracy %g' % (i, test_accuracy)) 
-  saver.save(sess, save_path = './SavedNN/V1')
+  saver.save(sess, save_path = './SavedNN/model.ckpt')
   #pred = sess.run(pred, feed_dict = {x: test_dataset})
   
 #%%
 with tf.Session() as session:
     # restore the model
-    saver.restore(session, "./SavedNN/V1")
+    saver.restore(session, "./SavedNN/model.ckpt")
     P = session.run(pred, feed_dict={x: test_dataset, keep_prob: 1.0})
   
 #%%  
 def comp_accuracy(pred, labels):
   return (100.0 * np.sum(pred == np.argmax(labels, 1))
           / pred.shape[0])
-  
 comp_accuracy(P, test_labels)     
